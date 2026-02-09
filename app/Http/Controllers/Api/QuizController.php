@@ -26,4 +26,15 @@ class QuizController extends Controller
             'data' => QuizResource::collection($data),
         ]);
     }
+
+    public function store(StoreQuizRequest $request)
+    {
+        $quiz = $this->quizService->createQuiz($request->validated());
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Soal berhasil ditambahkan',
+            'data' => new QuizResource($quiz),
+        ], 201);
+    }
 }
