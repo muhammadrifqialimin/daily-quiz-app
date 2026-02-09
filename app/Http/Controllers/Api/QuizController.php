@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
 use App\Http\Requests\StoreQuizRequest;
 use App\Http\Resources\QuizResource;
 use App\Services\QuizService;
@@ -16,9 +17,10 @@ class QuizController extends Controller
         $this->quizService = $quizService;
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        $data = $this->quizService->getTodayQuizzes();
+        $category = $request->query('category');
+        $data = $this->quizService->getTodayQuizzes($category);
 
         return response()->json([
             'status' => true,
