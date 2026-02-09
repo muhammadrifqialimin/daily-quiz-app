@@ -15,7 +15,7 @@ class QuizService
     {
         return Quiz::WhereDate('active_date', now())
             ->inRandomOrder()
-            ->limit(5)
+            ->limit(10)
             ->get();
     }
 }
