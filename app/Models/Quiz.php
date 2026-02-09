@@ -17,5 +17,6 @@ class Quiz extends Model
         'option_d',
         'answer',
         'active_date',
+        'category',
     ];
 }
