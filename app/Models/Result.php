@@ -18,6 +18,10 @@ class Result extends Model
         'answers',
     ];
 
+    protected $casts = [
+        'answers' => 'array', 
+    ];
+
     public function student()
     {
         return $this->belongsTo(Student::class);

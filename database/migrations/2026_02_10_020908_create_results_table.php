@@ -17,7 +17,7 @@ return new class extends Migration
         $table->string('category'); 
         $table->integer('total_correct');
         $table->integer('total_questions');
-        $table->integer('score');
+        $table->json('answers')->nullable()->after('score');
         $table->timestamps();
     });
 }

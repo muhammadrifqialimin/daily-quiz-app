@@ -14,4 +14,6 @@ Route::prefix('v1')->group(function () {
     Route::post('/submit-quiz', [ResultController::class, 'submit']);
     Route::get('/students/{id}/profile', [App\Http\Controllers\StudentController::class, 'profile']);
     Route::get('/results/{id}', [App\Http\Controllers\ResultController::class, 'show']);
+    Route::get('/schedules', [App\Http\Controllers\Api\ScheduleController::class, 'index']);
+    Route::post('/schedules', [App\Http\Controllers\Api\ScheduleController::class, 'store']);
 });
