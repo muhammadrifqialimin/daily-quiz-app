@@ -59,4 +59,56 @@ class StudentController extends Controller
             'data' => $student
         ]);
     }
+
+    public function profile($id)
+    {
+        $student = Student::find($id);
+
+        if (!$student) {
+            return response()->json(['message' => 'Siswa tidak ditemukan'], 404);
+        }
+
+        $results = Result::where('student_id', $id)
+                        ->orderBy('created_at', 'desc')
+                        ->get();
+
+        $totalQuiz = $results->count();
+        $highestScore = $results->max('score') ?? 0;
+        $averageScore = $totalQuiz > 0 ? round($results->avg('score'), 1) : 0;
+
+        $rank = "Pemula";
+        if ($averageScore >= 90) $rank = "Grand Master 🏆";
+        else if ($averageScore >= 80) $rank = "Expert 💎";
+        else if ($averageScore >= 60) $rank = "Senior ⭐";
+
+        $chartData = Result::where('student_id', $id)
+                        ->orderBy('created_at', 'asc') // 
+                        ->take(7)
+                        ->get()
+                        ->map(function($res) {
+                            return [
+                                'date' => $res->created_at->format('d/m'),
+                                'score' => $res->score,
+                                'correct' => $res->total_correct,
+                                'wrong' => $res->total_questions - $res->total_correct
+                            ];
+                        });
+
+        return response()->json([
+            'status' => true,
+            'data' => [
+                'name' => $student->name,
+                'class_name' => $student->class_name ?? 'Kelas 10A',
+                'profile_image' => $student->profile_image,
+                'stats' => [
+                    'total_quizzes' => $totalQuiz,
+                    'highest_score' => $highestScore,
+                    'average_score' => $averageScore,
+                    'rank' => $rank
+                ],
+                'history' => $results,
+                'chart_data' => $chartData
+            ]
+        ]);
+    }
 }
